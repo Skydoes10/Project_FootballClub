@@ -10,14 +10,14 @@ public class Club {
 	
 	//Attributes
 	private String name;
-	private String NIT;
+	private String nit;
 	private String creationDate;
 	private int [][] offices;
 	
 	//Builder
-	public Club(String name, String NIT, String creationDate) {
+	public Club(String name, String nit, String creationDate) {
 		this.name = name;
-		this.NIT = NIT;
+		this.nit = nit;
 		this.creationDate = creationDate;
 		offices = new int[6][6];
 		teams = new Team[2];
@@ -33,12 +33,12 @@ public class Club {
 		this.name = name;
 	}
 	
-	public String getNIT(){
-		return NIT;
+	public String getNit(){
+		return nit;
 	}
 	
-	public void setNIT(String NIT) {
-		this.NIT = NIT;
+	public void setNit(String nit) {
+		this.nit = nit;
 	}
 	
 	public String getCreationDate(){
@@ -64,17 +64,24 @@ public class Club {
 		return message;
 	}
 	
-	public String hirePlayer(String name, String id, double salary){
+	public String hirePlayer(String name, String id, double salary, String status){
 		String message = "\nThe player "+name+" was hired successfully";
-		Player player = new Player(name, id, salary, 0, 0, 0);
+		Player player = new Player(name, id, salary, status, 0, 0, 0);
 		workers.add(player);
 		return message;
 	}
 	
-	public String hireCoach(String name, String id, double salary, int experienceYears){
+	public String hireHeadCoach(String name, String id, double salary, String status, int experienceYears, int numberTeams, int championships){
 		String message = "\nThe coach "+name+" was hired successfully";
-		Coach coach = new Coach(name, id, salary, experienceYears);
-		workers.add(coach);
+		HeadCoach hCoach = new HeadCoach(name, id, salary, status, experienceYears, numberTeams, championships);
+		workers.add(hCoach);
+		return message;
+	}
+	
+	public String hireAssistantCoach(String name, String id, double salary, String status, int experienceYears, String wasPlayer){
+		String message = "\nThe coach "+name+" was hired successfully";
+		AssistantCoach aCoach = new AssistantCoach(name, id, salary, status, experienceYears, wasPlayer);
+		workers.add(aCoach);
 		return message;
 	}
 	
@@ -105,7 +112,7 @@ public class Club {
 	}
 	
 	public String addPlayerToTeam(String name, String id, int numberTshirt, int position, String teamName) {
-		String message = "The player or team was not found";
+		String message = "\nThe player or team was not found";
 		Team team = findTeam(teamName);
 		Player player = (Player) findEmployee(id);
 		if(team != null && player != null) {
@@ -127,6 +134,28 @@ public class Club {
 		return message;
 	}
 	
+	public String addCoachToTeam(String name, String id, String teamName, int coach) {
+		String message = "\nThe coach or team was not found";
+		Team team = findTeam(teamName);
+		if (coach == 1) {
+			HeadCoach hCoach = (HeadCoach) findEmployee(id);
+			if(team != null && hCoach != null) {
+			    message = team.addHCoach(hCoach);
+			}
+		}
+		else if (coach == 2) {
+			AssistantCoach aCoach = (AssistantCoach) findEmployee(id);
+			if(team != null && aCoach != null) {
+			    message = team.addACoach(aCoach);
+			}
+		}
+		else {
+			message = "\nInvalid type of coach option";
+		}
+		
+		return message;
+	}
+	
 	public Team findTeam(String name) {
 		Team foundT = null;
 		boolean found = false;
@@ -139,5 +168,12 @@ public class Club {
 		return foundT;
 	}
 	
+	public void showWorkers() {
+		if(workers.isEmpty() == false) {
+			for(int i=0; i<workers.size(); i++) {
+				System.out.println(workers.get(i).toString());
+			}
+		}
+	}
 
 }

@@ -8,12 +8,14 @@ abstract public class Employee {
 	private String name;
 	private String id;
 	private double salary;
+	private String status;
 	
 	//Builder
-	public Employee(String name, String id, double salary) {
+	public Employee(String name, String id, double salary, String status) {
 		this.name = name;
 		this.id = id;
 		this.salary = salary;
+		this.status = status;
 	}//End Builder
 	
 	//Getters and Setters
@@ -41,5 +43,16 @@ abstract public class Employee {
 		this.salary = salary;
 	}
 	
-	//End Getters and Setters
+	public String getStatus(){
+		return status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}//End Getters and Setters
+	
+	public String toString() {
+		String out = "\n **  Name: "+getName()+"\n **  ID: "+getId()+"\n **  Salary: "+getSalary()+"\n **  Status: "+getStatus();
+		return out;
+	}
 }

@@ -25,11 +25,11 @@ public class Main {
 			System.out.println("\n******************************************************" +
 								"\nSelect an option to start:\n" + 
 								"\n(1) Create a Team" + 
-								"\n(2) Players" + 
-								"\n(3) Coaches" + 
-								"\n(4) " + 
+								"\n(2) Hire employee" + 
+								"\n(3) Fire employee" + 
+								"\n(4) Add employee to a team" + 
 								"\n(5) " + 
-								"\n(6) " +
+								"\n(6) Show information" +
 								"\n(0) Exit" +
 								"\n******************************************************\n"
 								);
@@ -38,15 +38,15 @@ public class Main {
 		switch(option) {
 			case 1: createTeam();
 				break;
-			case 2: menu1();
+			case 2: menu1(option);
 				break;
-			case 3: menu2();
+			case 3: menu1(option);
 				break;
-			case 4: 
+			case 4: menu1(option);
 				break;
 			case 5: 
 				break;
-			case 6: 
+			case 6: menu2();
 				break;
 			case 0: menu = false;
 					System.out.println("\nBye!");
@@ -57,37 +57,67 @@ public class Main {
 		}
 	}
 	
-	public void menu1() {
+	public void menu1(int mainOption) {
 		boolean menu = true;
 		while(menu) {
 			System.out.println(
 					"\n******************************************************" +
-					"\ntype the desired option:" +
-					"\n(1) Hire player"+
-					"\n(2) Fire player"+
-					"\n(3) "+ 
-					"\n(4) "+ 
+					"\nType the desired option:" +
+					"\n(1) Player"+
+					"\n(2) Head coach"+ 
+					"\n(3) Assistant coach"+ 
 					"\n(0) Return" +
 					"\n******************************************************\n"
 					);
 			int option = sc.nextInt();
 			sc.nextLine();
-			switch(option) {
-				case 1:	hirePLayer();
+			if(mainOption == 2) {
+				switch(option) {
+				case 1:	hireEmployee(option);
 						menu = false;
 					break;
-				case 2:	fireEmployee();
+				case 2:	hireEmployee(option);
 						menu = false;
 					break;
-				case 3:	
-						menu = false;
-					break;
-				case 4:	
+				case 3:	hireEmployee(option);
 						menu = false;
 					break;
 				case 0:	menu = false;
 					break;
 				default: System.out.println("\nInvalid option");
+				}
+			}
+			else if(mainOption == 3) {
+				switch(option) {
+				case 1:	fireEmployee();
+						menu = false;
+					break;
+				case 2:	fireEmployee();
+						menu = false;
+					break;
+				case 3:	fireEmployee();
+						menu = false;
+					break;
+				case 0:	menu = false;
+					break;
+				default: System.out.println("\nInvalid option");
+				}
+			}
+			else {
+				switch(option) {
+				case 1:	addPlayerToTeam();
+						menu = false;
+					break;
+				case 2:	addCoachToTeam();
+						menu = false;
+					break;
+				case 3:	addCoachToTeam();
+						menu = false;
+					break;
+				case 0:	menu = false;
+					break;
+				default: System.out.println("\nInvalid option");
+				}
 			}
 		}
 	}
@@ -98,8 +128,8 @@ public class Main {
 			System.out.println(
 					"\n******************************************************" +
 					"\ntype the desired option:" +
-					"\n(1) Hire coach"+
-					"\n(2) Fire coach"+
+					"\n(1) Show information of all employees"+
+					"\n(2) "+
 					"\n(3) "+ 
 					"\n(4) "+ 
 					"\n(0) Return" +
@@ -108,10 +138,10 @@ public class Main {
 			int option = sc.nextInt();
 			sc.nextLine();
 			switch(option) {
-				case 1:	hireCoach();
+				case 1:	ShowAllEmployees();
 						menu = false;
 					break;
-				case 2:	fireEmployee();
+				case 2:	
 						menu = false;
 					break;
 				case 3:	
@@ -128,14 +158,14 @@ public class Main {
 	}
 	
 	public void createClub() {
-		String name, NIT, creationDate;
+		String name, nit, creationDate;
 		System.out.println("\nType the name of the club:");
 		name = sc.nextLine();
 		System.out.println("\nType the NIT:");
-		NIT = sc.nextLine();
+		nit = sc.nextLine();
 		System.out.println("\nEnter the Club's founding date:");
 		creationDate = sc.nextLine();
-		mainClub = new Club(name, NIT, creationDate);
+		mainClub = new Club(name, nit, creationDate);
 	}
 	
 	public void createTeam() {
@@ -146,8 +176,8 @@ public class Main {
 		System.out.println(message);
 	}
 	
-	public void hirePLayer() {
-		String name, id;
+	public void hireEmployee(int option) {
+		String name, id, status;
 		double salary;
 		System.out.println("\nType the name of the player:");
 		name = sc.nextLine();
@@ -156,25 +186,47 @@ public class Main {
 		System.out.println("\nType the player's salary:");
 		salary = sc.nextDouble();
 		sc.nextLine();
-		String message = mainClub.hirePlayer(name, id, salary);
+		status = "Inactive";
+		if (option == 1) {
+			hirePLayer(name, id, salary, status);
+		}
+		else if(option == 2) {
+			hireHeadCoach(name, id, salary, status);
+		}
+		else {
+			hireAssistantCoach(name, id, salary, status);
+		}
+	}
+	
+	public void hirePLayer(String name, String id, double salary, String status) {
+		String message = mainClub.hirePlayer(name, id, salary, status);
 		System.out.println(message);
 	}
 	
-	public void hireCoach() {
-		String name, id;
-		double salary;
-		int experienceYears;
-		System.out.println("\nType the name of the coach:");
-		name = sc.nextLine();
-		System.out.println("\nType the id of the coach:");
-		id = sc.nextLine();
-		System.out.println("\nType the coach's salary:");
-		salary = sc.nextDouble();
-		sc.nextLine();
+	public void hireHeadCoach(String name, String id, double salary, String status) {
+		int experienceYears, numberTeams, championships;
 		System.out.println("\nEnter the coach's years of experience:");
 		experienceYears = sc.nextInt();
 		sc.nextLine();
-		String message = mainClub.hireCoach(name, id, salary, experienceYears);
+		System.out.println("\nEnter the number of teams the coach has been in charge of:");
+		numberTeams = sc.nextInt();
+		sc.nextLine();
+		System.out.println("\nEnter the number of championships the coach has won:");
+		championships = sc.nextInt();
+		sc.nextLine();
+		String message = mainClub.hireHeadCoach(name, id, salary, status, experienceYears, numberTeams, championships);
+		System.out.println(message);
+	}
+	
+	public void hireAssistantCoach(String name, String id, double salary, String status) {
+		int experienceYears;
+		String wasPlayer;
+		System.out.println("\nEnter the coach's years of experience:");
+		experienceYears = sc.nextInt();
+		sc.nextLine();
+		System.out.println("\nWas the assistant coach a player? YES/NO");
+		wasPlayer = sc.nextLine();
+		String message = mainClub.hireAssistantCoach(name, id, salary, status, experienceYears, wasPlayer);
 		System.out.println(message);
 	}
 	
@@ -211,7 +263,28 @@ public class Main {
 		System.out.println(message);
 	}
 	
+	public void addCoachToTeam() {
+		String name, id, team;
+		int coach;
+		System.out.println("\nIs coach a head coach or an assistant coach?\n" +
+				"(1) Head coach\n" + 
+				"(2) Assistant coach\n"
+				);
+		coach = sc.nextInt();
+		sc.nextLine();
+		System.out.println("\nType the name of the coach:");
+		name = sc.nextLine();
+		System.out.println("\nType the id of the coach:");
+		id = sc.nextLine();
+		System.out.println("\nType the name of the team the coach will belong:");
+		team = sc.nextLine();
+		String message = mainClub.addCoachToTeam(name, id, team, coach);
+		System.out.println(message);
+	}
 	
+	public void ShowAllEmployees() {
+		mainClub.showWorkers();
+	}
 	
 	
 }

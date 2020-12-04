@@ -11,8 +11,8 @@ public class Player extends Employee{
 	private Position position;
 	
 	//Builder
-	public Player(String name, String id, double salary, int numberTshirt, int amountGoals, int averageGrade) {
-		super(name, id, salary);
+	public Player(String name, String id, double salary, String status, int numberTshirt, int amountGoals, int averageGrade) {
+		super(name, id, salary, status);
 		this.numberTshirt = numberTshirt;
 		this.amountGoals = amountGoals;
 		this.averageGrade = averageGrade;
@@ -49,6 +49,10 @@ public class Player extends Employee{
 	
 	public void setPosition(Position position) {
 		this.position = position;
+	}//End Getters and Setters
+	
+	public String toStringP() {
+		String out = "\n************* Player *************"+toString()+"\n **  T-shirt number: "+getNumberTshirt()+"\n **  Amount goals: "+getAmountGoals()+"\n **  Average grade: "+getAverageGrade()+"\n **  Position: "+getPosition()+"\n************************************";
+		return out;
 	}
-	//End Getters and Setters
 }
