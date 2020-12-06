@@ -1,6 +1,6 @@
 package model;
 
-public class HeadCoach extends Employee{
+public class HeadCoach extends Employee implements Calculate{
 	
 	//Relationships
 
@@ -41,9 +41,23 @@ public class HeadCoach extends Employee{
 	public void setChampionships(int championships) {
 		this.championships = championships;
 	}//End Getters and Setters
+
+	@Override
+	public double calculatePrice() {
+		double marketPrice = 0.0;
+		marketPrice = (super.getSalary()*10)+(getExperienceYears()*100)+(getChampionships()*50);
+		return marketPrice;
+	}
+
+	@Override
+	public double calculateLevel() {
+		double level = 0.0;
+		level = 5+(getChampionships()/10);
+		return level;
+	}
 	
 	public String toStringHC() {
-		String out = "\n************* Head Coach *************"+toString()+"\n **  Experience years: "+getExperienceYears()+"\n **  Managed teams: "+getNumberTeams()+"\n **  Championships won: "+getChampionships()+"\n************************************";
+		String out = "\n**************** Head Coach ***************"+toString()+"\n **  Experience years: "+getExperienceYears()+"\n **  Managed teams: "+getNumberTeams()+"\n **  Championships won: "+getChampionships()+"\n*******************************************";
 		return out;
 	}
 }

@@ -24,11 +24,11 @@ public class Main {
 		while(menu) {
 			System.out.println("\n******************************************************" +
 								"\nSelect an option to start:\n" + 
-								"\n(1) Create a Team" + 
+								"\n(1) Team" + 
 								"\n(2) Hire employee" + 
 								"\n(3) Fire employee" + 
 								"\n(4) Add employee to a team" + 
-								"\n(5) " + 
+								"\n(5) Organizing coaches in the offices" + 
 								"\n(6) Show information" +
 								"\n(0) Exit" +
 								"\n******************************************************\n"
@@ -36,7 +36,7 @@ public class Main {
 		option = sc.nextInt();
 		sc.nextLine();
 		switch(option) {
-			case 1: createTeam();
+			case 1: menu3();
 				break;
 			case 2: menu1(option);
 				break;
@@ -44,7 +44,7 @@ public class Main {
 				break;
 			case 4: menu1(option);
 				break;
-			case 5: 
+			case 5: organizeCoaches();
 				break;
 			case 6: menu2();
 				break;
@@ -108,10 +108,10 @@ public class Main {
 				case 1:	addPlayerToTeam();
 						menu = false;
 					break;
-				case 2:	addCoachToTeam();
+				case 2:	addCoachToTeam(option);
 						menu = false;
 					break;
-				case 3:	addCoachToTeam();
+				case 3:	addCoachToTeam(option);
 						menu = false;
 					break;
 				case 0:	menu = false;
@@ -128,26 +128,53 @@ public class Main {
 			System.out.println(
 					"\n******************************************************" +
 					"\ntype the desired option:" +
-					"\n(1) Show information of all employees"+
-					"\n(2) "+
-					"\n(3) "+ 
-					"\n(4) "+ 
+					"\n(1) Show imformation of the club"+
+					"\n(2) Show imformation of all teams"+
+					"\n(3) Show information of all employees"+ 
 					"\n(0) Return" +
 					"\n******************************************************\n"
 					);
 			int option = sc.nextInt();
 			sc.nextLine();
 			switch(option) {
-				case 1:	ShowAllEmployees();
+				case 1:	ShowClub();
 						menu = false;
 					break;
-				case 2:	
+				case 2:	ShowAllTeams();
 						menu = false;
 					break;
-				case 3:	
+				case 3:	ShowAllEmployees();
 						menu = false;
 					break;
-				case 4:	
+				case 0:	menu = false;
+					break;
+				default: System.out.println("\nInvalid option");
+			}
+		}
+	}
+	
+	public void menu3() {
+		boolean menu = true;
+		while(menu) {
+			System.out.println(
+					"\n******************************************************" +
+					"\ntype the desired option:" +
+					"\n(1) Create a Team"+
+					"\n(2) Design alignment"+
+					"\n(3) Organizing players in the locker rooms"+ 
+					"\n(0) Return" +
+					"\n******************************************************\n"
+					);
+			int option = sc.nextInt();
+			sc.nextLine();
+			switch(option) {
+				case 1:	createTeam();
+						menu = false;
+					break;
+				case 2:	designAlignment();
+						menu = false;
+					break;
+				case 3:	organizePlayers();
 						menu = false;
 					break;
 				case 0:	menu = false;
@@ -179,11 +206,11 @@ public class Main {
 	public void hireEmployee(int option) {
 		String name, id, status;
 		double salary;
-		System.out.println("\nType the name of the player:");
+		System.out.println("\nType the name of the employee:");
 		name = sc.nextLine();
-		System.out.println("\nType the id of the player:");
+		System.out.println("\nType the id of the employee:");
 		id = sc.nextLine();
-		System.out.println("\nType the player's salary:");
+		System.out.println("\nType the employee's salary:");
 		salary = sc.nextDouble();
 		sc.nextLine();
 		status = "Inactive";
@@ -220,13 +247,15 @@ public class Main {
 	
 	public void hireAssistantCoach(String name, String id, double salary, String status) {
 		int experienceYears;
-		String wasPlayer;
+		String wasPlayer, expertise;
 		System.out.println("\nEnter the coach's years of experience:");
 		experienceYears = sc.nextInt();
 		sc.nextLine();
-		System.out.println("\nWas the assistant coach a player? YES/NO");
+		System.out.println("\nWas the assistant coach a professional player? YES/NO");
 		wasPlayer = sc.nextLine();
-		String message = mainClub.hireAssistantCoach(name, id, salary, status, experienceYears, wasPlayer);
+		System.out.println("\nWrite down any expertise the assistant coach has. Ex: Offensive, defensive, possession, laboratory plays");
+		expertise = sc.nextLine();
+		String message = mainClub.hireAssistantCoach(name, id, salary, status, experienceYears, wasPlayer, expertise);
 		System.out.println(message);
 	}
 	
@@ -251,9 +280,10 @@ public class Main {
 		numberTshirt = sc.nextInt();
 		sc.nextLine();
 		System.out.println("\nIndicate the player's position:\n" +
-				"(1) DEFENDER\n" + 
-				"(2) MIDFIELDER\n" +
-				"(3) FORWARD\n"
+				"(1) GOALKEEPER\n" + 
+				"(2) DEFENDER\n" +
+				"(3) MIDFIELDER\n"+
+				"(4) FORWARD\n"
 				);
 		position = sc.nextInt();
 		sc.nextLine();
@@ -263,22 +293,15 @@ public class Main {
 		System.out.println(message);
 	}
 	
-	public void addCoachToTeam() {
+	public void addCoachToTeam(int option) {
 		String name, id, team;
-		int coach;
-		System.out.println("\nIs coach a head coach or an assistant coach?\n" +
-				"(1) Head coach\n" + 
-				"(2) Assistant coach\n"
-				);
-		coach = sc.nextInt();
-		sc.nextLine();
 		System.out.println("\nType the name of the coach:");
 		name = sc.nextLine();
 		System.out.println("\nType the id of the coach:");
 		id = sc.nextLine();
 		System.out.println("\nType the name of the team the coach will belong:");
 		team = sc.nextLine();
-		String message = mainClub.addCoachToTeam(name, id, team, coach);
+		String message = mainClub.addCoachToTeam(name, id, team, option);
 		System.out.println(message);
 	}
 	
@@ -286,5 +309,59 @@ public class Main {
 		mainClub.showWorkers();
 	}
 	
+	public void ShowAllTeams() {
+		mainClub.showTeams();
+	}
 	
+	public void ShowClub() {
+		mainClub.showClubInfo();
+	}
+	
+	public void designAlignment(){
+		String nameTeam, date;
+		int tactic, defenders, midfielders, forwards;
+		System.out.println("\nEnter the name of the team for which the lineup is to be designed:");
+		nameTeam = sc.nextLine();
+		System.out.println("\nEnter the date of the match where the lineup will be used: (DD/MM/YY)");
+		date = sc.nextLine();
+		System.out.println("\nSelect alignment tactics:\n" +
+				"(1) POSSESSION\n" +
+				"(2) COUNTERATTACK\n" +
+				"(3) HIGH PRESSURE\n" +
+				"(4) DEFAULT\n"
+				);
+		tactic = sc.nextInt();
+		sc.nextLine();
+		System.out.println("\nEnter the number of defenders that will be on the soccer field:");
+		defenders = sc.nextInt();
+		sc.nextLine();
+		System.out.println("\nEnter the number of midfielders that will be on the soccer field:");
+		midfielders = sc.nextInt();
+		sc.nextLine();
+		System.out.println("\nEnter the number of forwards that will be on the soccer field:");
+		forwards = sc.nextInt();
+		sc.nextLine();
+		String message = mainClub.designAlignment(nameTeam, date, tactic, defenders, midfielders, forwards);
+		System.out.println(message);
+	}
+	
+	public void organizePlayers() {
+		String nameTeam;
+		int locker;
+		System.out.println("\nEnter the name of the team for which the lineup is to be designed:");
+		nameTeam = sc.nextLine();
+		System.out.println("\nSelect a locker room:\n" +
+				"(1) Locker room A\n" +
+				"(2) Locker room B\n"
+				);
+		locker = sc.nextInt();
+		sc.nextLine();
+		String message = mainClub.organizePinLocker(nameTeam, locker);
+		System.out.println(message);
+	}
+	
+	public void organizeCoaches() {
+		String message = mainClub.organizeCinOffices();
+		System.out.println(message);
+	}
 }

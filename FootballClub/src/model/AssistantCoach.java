@@ -7,14 +7,14 @@ public class AssistantCoach extends Employee{
 	//Attributes
 	private int experienceYears;
 	private String wasPlayer;
-	
+	private String expertise;
 	
 	//Builder
-	public AssistantCoach(String name, String id, double salary, String status, int experienceYears,  String wasPlayer) {
+	public AssistantCoach(String name, String id, double salary, String status, int experienceYears,  String wasPlayer, String expertise) {
 		super(name, id, salary, status);
 		this.experienceYears = experienceYears;
 		this.wasPlayer = wasPlayer;
-		
+		this.expertise = expertise;
 	}//End Builder
 	
 	//Getters and Setters
@@ -34,10 +34,16 @@ public class AssistantCoach extends Employee{
 		this.wasPlayer = wasPlayer;
 	}
 	
-	//End Getters and Setters
+	public String getExpertise(){
+		return expertise;
+	}
 	
-	public String toStringHC() {
-		String out = "\n************* Assistant Coach *************"+toString()+"\n **  Experience years: "+getExperienceYears()+"\n **  Was a player: "+getWasPlayer()+"\n************************************";
+	public void setExpertise(String expertise) {
+		this.expertise = expertise;
+	}//End Getters and Setters
+	
+	public String toStringAC() {
+		String out = "\n************* Assistant Coach *************"+toString()+"\n **  Experience years: "+getExperienceYears()+"\n **  Was a player: "+getWasPlayer()+"\n **  Expertise: "+getExpertise()+"\n*******************************************";
 		return out;
 	}
 }

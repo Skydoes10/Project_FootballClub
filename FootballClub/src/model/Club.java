@@ -12,14 +12,14 @@ public class Club {
 	private String name;
 	private String nit;
 	private String creationDate;
-	private int [][] offices;
+	private String [][] offices;
 	
 	//Builder
 	public Club(String name, String nit, String creationDate) {
 		this.name = name;
 		this.nit = nit;
 		this.creationDate = creationDate;
-		offices = new int[6][6];
+		offices = new String[6][6];
 		teams = new Team[2];
 		workers = new ArrayList<Employee>();
 	}//End Builder
@@ -78,9 +78,9 @@ public class Club {
 		return message;
 	}
 	
-	public String hireAssistantCoach(String name, String id, double salary, String status, int experienceYears, String wasPlayer){
+	public String hireAssistantCoach(String name, String id, double salary, String status, int experienceYears, String wasPlayer, String expertise){
 		String message = "\nThe coach "+name+" was hired successfully";
-		AssistantCoach aCoach = new AssistantCoach(name, id, salary, status, experienceYears, wasPlayer);
+		AssistantCoach aCoach = new AssistantCoach(name, id, salary, status, experienceYears, wasPlayer, expertise);
 		workers.add(aCoach);
 		return message;
 	}
@@ -90,6 +90,11 @@ public class Club {
 		Employee employee = findEmployee(id);
 		if(employee != null) {
 			workers.remove(employee);
+			for(int i=0; i<teams.length; i++) {
+				if(teams[i] != null) {
+					teams[i].fireEmployeeOfTeam(employee);
+				}
+			}
 		}
 		else{
 			message = "\n"+name+" has not been found";
@@ -118,11 +123,13 @@ public class Club {
 		if(team != null && player != null) {
 			Position posit = null;
 			switch(position){
-		    case 1: posit = Position.DEFENDER;
+		    case 1: posit = Position.GOALKEEPER;
 		        break;
-		    case 2: posit = Position.MIDFIELDER;
+		    case 2: posit = Position.DEFENDER;
 		        break;
-		    case 3: posit = Position.FORWARD;
+		    case 3: posit = Position.MIDFIELDER;
+		    	break;
+		    case 4: posit = Position.FORWARD;
 		    	break;
 		    default: message = "\nInvalid position option";
 			}
@@ -137,13 +144,13 @@ public class Club {
 	public String addCoachToTeam(String name, String id, String teamName, int coach) {
 		String message = "\nThe coach or team was not found";
 		Team team = findTeam(teamName);
-		if (coach == 1) {
+		if (coach == 2) {
 			HeadCoach hCoach = (HeadCoach) findEmployee(id);
 			if(team != null && hCoach != null) {
 			    message = team.addHCoach(hCoach);
 			}
 		}
-		else if (coach == 2) {
+		else if (coach == 3) {
 			AssistantCoach aCoach = (AssistantCoach) findEmployee(id);
 			if(team != null && aCoach != null) {
 			    message = team.addACoach(aCoach);
@@ -169,11 +176,86 @@ public class Club {
 	}
 	
 	public void showWorkers() {
-		if(workers.isEmpty() == false) {
+		if (workers.isEmpty() == false) {
 			for(int i=0; i<workers.size(); i++) {
-				System.out.println(workers.get(i).toString());
+				if (workers.get(i) instanceof Player) {
+					System.out.println(((Player) workers.get(i)).toStringP());
+				}
+				else if (workers.get(i) instanceof HeadCoach) {
+					System.out.println(((HeadCoach)workers.get(i)).toStringHC());
+				}
+				else if (workers.get(i) instanceof AssistantCoach) {
+					System.out.println(((AssistantCoach)workers.get(i)).toStringAC());
+				}
 			}
 		}
 	}
 
+	public void showTeams() {
+		for(int i=0; i<teams.length; i++){
+			if(teams[i] != null){
+				System.out.println(teams[i].toString());
+			}
+		}
+	}
+	
+	public String designAlignment(String team, String date, int tactic, int defenders, int midfielders, int forwards) {
+		String message = "\nTeam not found";
+		Team foundT = findTeam(team);
+		if(foundT != null) {
+			message = foundT.createLineup(date, tactic, defenders, midfielders, forwards);	
+		}
+		return message;
+	}
+	
+	public String organizePinLocker(String nameTeam, int locker) {
+		String message = "\nTeam not found";
+		Team foundT = findTeam(nameTeam);
+		if(foundT != null) {
+			if(locker == 1) {
+				message = foundT.assignLockerA();
+			}
+			else if(locker == 2) {
+				message = foundT.assignLockerB();
+			}
+			else {
+				message = "\nInvalid locker room option";
+			}
+		}
+		return message;
+	}
+	
+	public String organizeCinOffices() {
+		String message = "", office = "";
+		for (int i = 0; i < offices.length; i++) {
+			for (int j = 0; j < offices[i].length; j++) {
+				offices[i][j] = "[---]";
+			}
+		}
+		for (int i = 0; i < offices.length; i++) {
+			for (int j = 0; j < offices[i].length; j++) {
+				for(int n = 0; n < workers.size(); n++) {
+					if(workers.get(n) instanceof HeadCoach) {
+						offices[i][j] = "["+workers.get(n).getName()+"]";
+					}
+					else if(workers.get(n) instanceof AssistantCoach) {
+						offices[i][j] = "["+workers.get(n).getName()+"]";
+					}
+				}
+			}
+		}
+		for (int i = 0; i < offices.length; i++) {
+	        for (int j = 0; j < offices[i].length; j++) {
+	        	office += offices[i][j];
+	        }
+	        office += "\n";
+	    }
+	    message = "\nOffices: \n"+office;
+		return message;
+	}
+	
+	public String showClubInfo() {
+		String out = "\n****************** Club ******************\n ** Name: "+getName()+"\n ** NIT: "+getNit()+"\n ** Creation Date: "+getCreationDate()+"\n*******************************************";
+		return out;
+	}
 }

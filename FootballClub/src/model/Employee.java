@@ -52,7 +52,7 @@ abstract public class Employee {
 	}//End Getters and Setters
 	
 	public String toString() {
-		String out = "\n **  Name: "+getName()+"\n **  ID: "+getId()+"\n **  Salary: "+getSalary()+"\n **  Status: "+getStatus();
+		String out = "\n **  Name: "+getName()+"\n **  ID: "+getId()+"\n **  Salary: $"+getSalary()+"\n **  Status: "+getStatus();
 		return out;
 	}
 }
